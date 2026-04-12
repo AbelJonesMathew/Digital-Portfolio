@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abel Jones Mathew | Creative Developer Portfolio</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- Skill Bars --- */
+        .skill-bar-wrap {
+            margin-bottom: 1.2rem;
+        }
+
+        .skill-bar-wrap:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 0.45rem;
+        }
+
+        .skill-label span:last-child {
+            color: var(--accent-primary);
+        }
+
+        .skill-track {
+            width: 100%;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.is-visible .skill-fill {
+            width: var(--fill);
+        }
+
+        /* --- Login Button --- */
+        .btn-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-white);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .btn-login:hover {
+            border-color: var(--accent-primary);
+            background: rgba(129, 140, 248, 0.08);
+            color: var(--accent-primary);
+        }
+
+        .btn-login.logged-in {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+
+        .btn-login.logged-in:hover {
+            background: rgba(74, 222, 128, 0.08);
+        }
+
+        /* --- Login Modal Overlay --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: rgba(15, 15, 25, 0.9);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.8rem 2.4rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(129, 140, 248, 0.08);
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 24px rgba(129, 140, 248, 0.35);
+        }
+
+        .modal-box h2 {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .modal-box .modal-sub {
+            text-align: center;
+            font-size: 0.83rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-white);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+        }
+
+        .modal-error {
+            font-size: 0.8rem;
+            color: #f87171;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            min-height: 1em;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .modal-error.show {
+            opacity: 1;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.2s;
+            margin-top: 0.3rem;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.1rem;
+            right: 1.3rem;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-white);
+        }
+
+        .modal-box {
+            position: relative;
+        }
+
+        /* --- Exclusive Section --- */
+        .section-exclusive {
+            padding: 100px 10%;
+            display: none;
+        }
+
+        .section-exclusive.unlocked {
+            display: block;
+            animation: fadeInReveal 0.7s forwards;
+        }
+
+        .exclusive-banner {
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.08), rgba(192, 132, 252, 0.08));
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .exclusive-banner .lock-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .exclusive-banner h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .exclusive-banner p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .exclusive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .exclusive-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 1.8rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .exclusive-card:hover {
+            border-color: rgba(129, 140, 248, 0.35);
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .exclusive-card .ec-icon {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .exclusive-card h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .exclusive-card p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* --- Modal Switch Link --- */
+        .modal-switch {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 1.2rem;
+        }
+
+        .modal-switch a {
+            color: var(--accent-primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .modal-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Sign Up Nav Button --- */
+        .btn-signup-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(129, 140, 248, 0.45);
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(192, 132, 252, 0.1));
+            color: var(--accent-primary);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-signup-nav:hover {
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(192, 132, 252, 0.2));
+            border-color: var(--accent-primary);
+            transform: translateY(-1px);
+        }
+
+        /* === Responsive: inline components === */
+
+        /* Modal — full-width on mobile */
+        @media (max-width: 600px) {
+            .modal-box {
+                margin: 1rem;
+                padding: 2rem 1.4rem;
+                border-radius: 18px;
+                max-width: calc(100vw - 2rem);
+            }
+
+            .modal-logo {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            .modal-box h2 {
+                font-size: 1.2rem;
+            }
+
+            .btn-submit {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .form-group input {
+                padding: 0.65rem 0.9rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Skill bars */
+        @media (max-width: 480px) {
+            .skill-label {
+                font-size: 0.75rem;
+            }
+
+            .skill-track {
+                height: 6px;
+            }
+
+            .skill-bar-wrap {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Exclusive section */
+        @media (max-width: 768px) {
+            .section-exclusive {
+                padding: 70px 5% 50px;
+            }
+
+            .exclusive-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .exclusive-banner {
+                padding: 1.8rem 1.2rem;
+            }
+
+            .exclusive-banner h3 {
+                font-size: 1.3rem;
+            }
+
+            .exclusive-banner p {
+                font-size: 0.84rem;
+            }
+
+            .exclusive-card {
+                padding: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-exclusive {
+                padding: 60px 4% 40px;
+            }
+
+            .exclusive-banner {
+                padding: 1.4rem 1rem;
+            }
+
+            .exclusive-card h4 {
+                font-size: 0.95rem;
+            }
+
+            .exclusive-card p {
+                font-size: 0.82rem;
+            }
+        }
+
+        /* --- Resume Gate Popup --- */
+        .resume-gate-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 3500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .resume-gate-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .resume-gate {
+            position: relative;
+            background: rgba(12, 12, 22, 0.97);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 2.4rem 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(129, 140, 248, 0.12);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            min-width: 300px;
+            max-width: 360px;
+            transform: scale(0.9) translateY(10px);
+            transition: transform 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .resume-gate-overlay.active .resume-gate {
+            transform: scale(1) translateY(0);
+        }
+
+        .resume-gate-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .resume-gate-close:hover {
+            color: var(--text-white);
+        }
+
+        .resume-gate-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .resume-gate h3 {
+            color: var(--text-white);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .resume-gate p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .resume-gate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.72rem 2.2rem;
+            border-radius: 100px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #fff;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 20px rgba(129, 140, 248, 0.4);
+        }
+
+        .resume-gate-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Animated Glow Background -->
+    <!-- Particle canvas (behind blobs) -->
+    <canvas id="bgCanvas"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;pointer-events:none;"></canvas>
+
+    <!-- Animated Glow Blobs -->
+    <div class="bg-gradient-wrapper">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Minimal Navbar -->
+    <nav>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#projects">Skills</a>
+            <a href="tel:+918590989997">Contact</a>
+        </div>
+        <div class="nav-auth">
+            <button class="btn-signup-nav" id="navSignupBtn" onclick="openSignup()">
+                <i class="fa-solid fa-user-plus"></i> <span class="btn-text">Sign Up</span>
+            </button>
+            <button class="btn-login" id="navLoginBtn" onclick="openLogin()">
+                <i class="fa-solid fa-lock"></i> <span class="btn-text">Login</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#home" onclick="closeMobileNav()">Home</a>
+        <a href="#projects" onclick="closeMobileNav()">Skills</a>
+        <a href="tel:+918590989997" onclick="closeMobileNav()">Contact</a>
+    </div>
+
+    <!-- Auth Modal (Login + Sign Up) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeLogin()" aria-label="Close">&times;</button>
+
+            <!-- Login Panel -->
+            <div id="loginPanel">
+                <div class="modal-logo"><i class="fa-solid fa-user-shield"></i></div>
+                <h2>Welcome Back</h2>
+                <p class="modal-sub">Sign in to access exclusive content</p>
+                <div class="form-group">
+                    <label for="loginUser">Email Address</label>
+                    <input type="email" id="loginUser" placeholder="Enter your email" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPass">Password</label>
+                    <input type="password" id="loginPass" placeholder="Enter password" autocomplete="current-password">
+                </div>
+                <p class="modal-error" id="loginError"></p>
+                <button class="btn-submit" onclick="attemptLogin()">Sign In</button>
+                <p class="modal-switch">No account? <a onclick="showSignupPanel()">Sign Up</a></p>
+            </div>
+
+            <!-- Sign Up Panel -->
+            <div id="signupPanel" style="display:none;">
+                <div class="modal-logo"><i class="fa-solid fa-user-plus"></i></div>
+                <h2>Create Account</h2>
+                <p class="modal-sub">Register to access exclusive content</p>
+                <div class="form-group">
+                    <label for="signupUser">Email Address</label>
+                    <input type="email" id="signupUser" placeholder="Enter your email" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPass">Password</label>
+                    <input type="password" id="signupPass" placeholder="Choose a password" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirm">Confirm Password</label>
+                    <input type="password" id="signupConfirm" placeholder="Confirm your password"
+                        autocomplete="new-password">
+                </div>
+                <p class="modal-error" id="signupError"></p>
+                <button class="btn-submit" onclick="attemptSignup()">Create Account</button>
+                <p class="modal-switch">Already registered? <a onclick="showLoginPanel()">Log In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Gate Popup -->
+    <div class="resume-gate-overlay" id="resumeGateOverlay">
+        <div class="resume-gate">
+            <button class="resume-gate-close" onclick="closeResumeGate()" aria-label="Close">&times;</button>
+            <div class="resume-gate-icon"><i class="fa-solid fa-file-shield"></i></div>
+            <h3>Want to access the resume?</h3>
+            <p>Log in to download the resume and unlock exclusive content.</p>
+            <button class="resume-gate-btn" onclick="closeResumeGate(); openLogin();">
+                <i class="fa-solid fa-lock"></i> Log In
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero / Landing -->
+    <header id="home">
+        <div class="profile-wrap">
+            <div class="profile-img-container">
+                <img class="profile-img" src="Abel.jpg" alt="Abel Jones Mathew">
+            </div>
+        </div>
+
+        <div class="hero-text">
+            <h1>Abel Jones Mathew</h1>
+            <p>Passionate developer focused on building modern, user-friendly web experiences.<br>I enjoy turning ideas
+                into visually appealing and functional digital products.<br>Always learning, improving, and exploring
+                new technologies.</p>
+        </div>
+
+        <div class="cta-container">
+            <a href="resume.pdf" download="resume.pdf" class="btn btn-resume" onclick="return handleResumeClick(event)">
+                <i class="fa-solid fa-arrow-down-long"></i> Download Resume
+            </a>
+            <a href="www.linkedin.com/in/abel-jones-mathew-27662837a" target="_blank"
+                class="btn btn-social btn-linkedin">
+                <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+            </a>
+            <a href="https://github.com/AbelJonesMathew" target="_blank" class="btn btn-social btn-github">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <!-- Project Gallery -->
+    <section class="section-projects" id="projects">
+        <div class="section-header">
+            <h2>Skills</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="grid-projects">
+            <!-- Skill Card: Web Development -->
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-code"></i></div>
+                <h3>Web Development</h3>
+                <p>Building modern, responsive interfaces with clean markup and polished styling.</p>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>HTML &amp; CSS</span><span>85%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>JavaScript</span><span>70%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 70%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Card: Programming Languages -->
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-terminal"></i></div>
+                <h3>Programming Languages</h3>
+                <p>Languages I work with across different domains of software development.</p>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>Python</span><span>85%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>C / C++</span><span>50%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 50%;"></div>
+                    </div>
+                </div>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>Java</span><span>0%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Card: Extra Talents -->
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-star"></i></div>
+                <h3>Extra Talents</h3>
+                <p>Beyond tech — passions and skills that define who I am outside the screen.</p>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>Cricket</span><span>100%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 100%;"></div>
+                    </div>
+                </div>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>Keyboard</span><span>90%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-bar-wrap">
+                    <div class="skill-label"><span>Music</span><span>70%</span></div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="--fill: 70%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exclusive Content (unlocked after login) -->
+    <section class="section-exclusive" id="exclusiveSection">
+        <div class="section-header">
+            <h2>Exclusive Content</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="exclusive-banner">
+            <div class="lock-icon"><i class="fa-solid fa-unlock-keyhole"></i></div>
+            <h3>You're in! 🎉</h3>
+            <p>Welcome to Abel's private space — here you'll find personal projects, contact details, and more.</p>
+        </div>
+        <div class="exclusive-grid">
+            <div class="exclusive-card">
+                <div class="ec-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                <h4>Direct Contact</h4>
+                <p>
+                    📧 <a href="mailto:abeljonesmathew@gmail.com"
+                        style="color:var(--accent-primary);text-decoration:none;">abeljonesmathew@gmail.com</a><br>
+                    📞 <a href="tel:+918590989997" style="color:var(--accent-primary);text-decoration:none;">+91 85909
+                        89997</a><br>
+                    📸 <a href="https://www.instagram.com/abel_jones_2007/" target="_blank"
+                        style="color:var(--accent-primary);text-decoration:none;">@abel_jones_2007</a>
+                </p>
+            </div>
+            <div class="exclusive-card">
+                <div class="ec-icon"><i class="fa-brands fa-github"></i></div>
+                <h4>Private Projects</h4>
+                <p style="margin-bottom:1rem;">Live projects hosted on GitHub Pages:</p>
+                <p style="margin-bottom:0.6rem;">
+                    🧮 <a href="https://abeljonesmathew.github.io/Marks_Calculator/" target="_blank"
+                        style="color:var(--accent-primary);text-decoration:none;font-weight:600;">
+                        Marks Calculator
+                    </a>
+                </p>
+                <p style="margin-bottom:0;">
+                    👤 <a href="https://abeljonesmathew.github.io/profile/" target="_blank"
+                        style="color:var(--accent-primary);text-decoration:none;font-weight:600;">
+                        Profile Page
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Footer -->
+    <footer>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/abel_jones_2007/" target="_blank" aria-label="Instagram"><i
+                    class="fa-brands fa-instagram"></i></a>
+            <a href="mailto:abeljonesmathew@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+            <a href="tel:+918590989997" aria-label="Phone"><i class="fa-solid fa-phone"></i></a>
+        </div>
+        <p class="copyright">&copy; 2026 Abel Jones Mathew &bull; All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // ============================================================
+        // Credential storage: localStorage (primary) + xlsx (export)
+        // ============================================================
+        const STORAGE_KEY = 'portfolio_users';
+        let isLoggedIn = false;
+        let pendingResumeDownload = false; // set when user hits gate from resume btn
+
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+            catch (e) { return []; }
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+        }
+
+        // --- Panel switching ---
+        function showLoginPanel() {
+            document.getElementById('loginPanel').style.display = 'block';
+            document.getElementById('signupPanel').style.display = 'none';
+            document.getElementById('loginError').classList.remove('show');
+            setTimeout(() => document.getElementById('loginUser').focus(), 50);
+        }
+
+        function showSignupPanel() {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('signupPanel').style.display = 'block';
+            document.getElementById('signupError').classList.remove('show');
+            setTimeout(() => document.getElementById('signupUser').focus(), 50);
+        }
+
+        // --- Open / Close ---
+        function openLogin() {
+            if (isLoggedIn) { logout(); return; }
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            showLoginPanel();
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function openSignup() {
+            document.getElementById('signupUser').value = '';
+            document.getElementById('signupPass').value = '';
+            document.getElementById('signupConfirm').value = '';
+            showSignupPanel();
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLogin() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        // --- Login: compare email+password against localStorage ---
+        function attemptLogin() {
+            const email = document.getElementById('loginUser').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPass').value;
+            const errEl = document.getElementById('loginError');
+            errEl.style.color = '#f87171';
+
+            const users = getUsers();
+            const found = users.find(u => u.email === email && u.password === pass);
+
+            if (found) {
+                isLoggedIn = true;
+                closeLogin();
+                const btn = document.getElementById('navLoginBtn');
+                btn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+                btn.classList.add('logged-in');
+                document.getElementById('navSignupBtn').style.display = 'none';
+                document.getElementById('exclusiveSection').classList.add('unlocked');
+
+                if (pendingResumeDownload) {
+                    pendingResumeDownload = false;
+                    setTimeout(() => {
+                        const a = document.createElement('a');
+                        a.href = 'resume.pdf';
+                        a.download = 'resume.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }, 400);
+                } else {
+                    document.getElementById('exclusiveSection').scrollIntoView({ behavior: 'smooth' });
+                }
+            } else {
+                errEl.textContent = 'Incorrect email or password.';
+                errEl.classList.add('show');
+                document.getElementById('loginPass').value = '';
+                document.getElementById('loginPass').focus();
+            }
+        }
+
+        // --- Sign Up: validate email+password, save, export xlsx ---
+        function attemptSignup() {
+            const email = document.getElementById('signupUser').value.trim().toLowerCase();
+            const password = document.getElementById('signupPass').value;
+            const confirm = document.getElementById('signupConfirm').value;
+            const errEl = document.getElementById('signupError');
+            errEl.style.color = '#f87171';
+            errEl.classList.remove('show');
+
+            // Basic email format check
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                errEl.textContent = 'Please enter a valid email address.';
+                errEl.classList.add('show'); return;
+            }
+            if (!password) {
+                errEl.textContent = 'Please enter a password.';
+                errEl.classList.add('show'); return;
+            }
+            if (password.length < 4) {
+                errEl.textContent = 'Password must be at least 4 characters.';
+                errEl.classList.add('show'); return;
+            }
+            if (password !== confirm) {
+                errEl.textContent = 'Passwords do not match.';
+                errEl.classList.add('show'); return;
+            }
+
+            const users = getUsers();
+            if (users.find(u => u.email === email)) {
+                errEl.textContent = 'An account with this email already exists.';
+                errEl.classList.add('show'); return;
+            }
+
+            // Save and export
+            users.push({ email, password });
+            saveUsers(users);
+
+            // Switch to login with success message
+            showLoginPanel();
+            document.getElementById('loginUser').value = email;
+            const loginErr = document.getElementById('loginError');
+            loginErr.style.color = '#4ade80';
+            loginErr.textContent = '\u2713 Account created';
+            loginErr.classList.add('show');
+        }
+
+        // --- Logout ---
+        function logout() {
+            isLoggedIn = false;
+            const btn = document.getElementById('navLoginBtn');
+            btn.innerHTML = '<i class="fa-solid fa-lock"></i> <span class="btn-text">Login</span>';
+            btn.classList.remove('logged-in');
+            document.getElementById('navSignupBtn').style.display = '';
+            document.getElementById('exclusiveSection').classList.remove('unlocked');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Enter key submits active panel
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeLogin(); return; }
+            if (e.key === 'Enter' && document.getElementById('loginModal').classList.contains('active')) {
+                if (document.getElementById('signupPanel').style.display !== 'none') {
+                    attemptSignup();
+                } else {
+                    attemptLogin();
+                }
+            }
+        });
+
+        // Close on backdrop click
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('loginModal')) closeLogin();
+        });
+
+        // --- Hamburger / Mobile Nav ---
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            const isOpen = nav.classList.toggle('open');
+            btn.classList.toggle('open', isOpen);
+            btn.setAttribute('aria-expanded', isOpen);
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
+            document.getElementById('hamburger').classList.remove('open');
+        }
+
+        // Close mobile nav on outside click
+        document.addEventListener('click', (e) => {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+                closeMobileNav();
+            }
+        });
+
+        // =============================================
+        // PARTICLE BACKGROUND ANIMATION
+        // =============================================
+        (function () {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const COLORS = ['#818cf8', '#c084fc', '#6366f1', '#4f46e5', '#0ea5e9'];
+            const COUNT = window.innerWidth < 600 ? 40 : 80;
+            const LINK_DIST = 130;
+
+            class Particle {
+                constructor() { this.init(); }
+                init() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.r = Math.random() * 1.8 + 0.4;
+                    this.vx = (Math.random() - 0.5) * 0.35;
+                    this.vy = (Math.random() - 0.5) * 0.35;
+                    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                    this.alpha = Math.random() * 0.45 + 0.1;
+                    this.phase = Math.random() * Math.PI * 2;
+                    this.pSpeed = Math.random() * 0.018 + 0.004;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.phase += this.pSpeed;
+                    if (this.x < -10) this.x = canvas.width + 10;
+                    if (this.x > canvas.width + 10) this.x = -10;
+                    if (this.y < -10) this.y = canvas.height + 10;
+                    if (this.y > canvas.height + 10) this.y = -10;
+                }
+                draw() {
+                    const a = this.alpha * (0.55 + 0.45 * Math.sin(this.phase));
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = a;
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            const particles = Array.from({ length: COUNT }, () => new Particle());
+
+            function drawLinks() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < LINK_DIST) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = '#818cf8';
+                            ctx.globalAlpha = (1 - d / LINK_DIST) * 0.1;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                            ctx.globalAlpha = 1;
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                drawLinks();
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // --- Resume Gate ---
+        function handleResumeClick(e) {
+            if (isLoggedIn) return true;  // already logged in — allow download
+            e.preventDefault();
+            pendingResumeDownload = true; // remember user wants the resume
+            openResumeGate();
+            return false;
+        }
+        function openResumeGate() {
+            document.getElementById('resumeGateOverlay').classList.add('active');
+        }
+        function closeResumeGate() {
+            // just hides overlay — keeps pendingResumeDownload so login can use it
+            document.getElementById('resumeGateOverlay').classList.remove('active');
+        }
+        function cancelResumeGate() {
+            // user dismissed without logging in — clear the flag
+            pendingResumeDownload = false;
+            closeResumeGate();
+        }
+        // Backdrop click = cancel
+        document.getElementById('resumeGateOverlay').addEventListener('click', function (e) {
+            if (e.target === this) cancelResumeGate();
+        });
+    </script>
+
+</body>
+
+</html>
